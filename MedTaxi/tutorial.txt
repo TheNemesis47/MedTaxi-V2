@@ -1,0 +1,22 @@
+se si fanno modifiche sul db
+python manage.py makemigrations
+python manage.py migrate
+
+per runnare il server
+python manage.py runserver
+
+per installare le dipendenze
+pip install -r requirements.txt
+
+
+per vedere corretteamente tutti i campi delle tabella
+SELECT
+    *
+FROM
+    public.users_normaluser nu              // cambiare con users_company per le aziende
+INNER JOIN
+    public.users_customuser cu
+ON
+    nu.user_id = cu.id
+ORDER BY
+    nu.id ASC;
