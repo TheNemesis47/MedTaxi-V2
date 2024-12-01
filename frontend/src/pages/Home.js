@@ -1,10 +1,19 @@
-import React from "react";
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const Home = () => {
+function Home() {
+    const navigate = useNavigate();
+
     return (
-        <div style={{textAlign: 'center', marginTop: '50px'}}>
-            <h1>Benvenuto su MedTaxi!</h1>
-            <p>Questa è la tua prima schermata statica.</p>
+        <div>
+            <h1>Home Page</h1>
+            <div className={"columns-2"}>
+                <button className={"w-64"} onClick={() => navigate('/login')}>Login</button>
+                <button className={"w-64"} onClick={() => navigate('/register')}>Register</button>
+            </div>
+            <button>
+                <button className={"w-64"} onClick={() => navigate("/ViewUser")}>ADMIN</button>
+            </button>
         </div>
     );
 }
