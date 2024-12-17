@@ -1,0 +1,232 @@
+openapi: 3.0.1
+info:
+  title: MedTaxi API
+  description: API for managing users, companies, and ambulances
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api
+    description: Local development server
+paths:
+  /user/{userId}:
+    get:
+      summary: Retrieve a specific user
+      operationId: getUserById
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: Retrieve a specific user by their ID
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A specific user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    post:
+      summary: Crud op on existing user
+      operationId: updateUser
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: The ID of the user to update
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OperationDtoRequest'
+      responses:
+        '200':
+          description: Operation result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationDtoResponse'
+  /user:
+    get:
+      summary: Retrieve all users
+      operationId: getAllUsers
+      responses:
+        '200':
+          description: A list of all users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    post:
+      summary: Create a new user
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OperationDtoRequest'
+      responses:
+        '201':
+          description: User successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationDtoResponse'
+  /companies:
+    get:
+      summary: Retrieve companies based on filters
+      operationId: getCompanies
+      parameters:
+        - name: filter
+          in: query
+          required: false
+          description: Filter for retrieving specific companies
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A list of companies
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Company'
+    post:
+      summary: Create a company
+      operationId: createCompany
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OperationDtoRequest'
+      responses:
+        '200':
+          description: Operation result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationDtoResponse'
+  /ambulance:
+    get:
+      summary: Retrieve ambulances based on filters
+      operationId: getAmbulances
+      parameters:
+        - name: filter
+          in: query
+          required: false
+          description: Filter for retrieving specific ambulances
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A list of ambulances
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Ambulance'
+    post:
+      summary: Create an ambulance
+      operationId: createAmbulance
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OperationDtoRequest'
+      responses:
+        '200':
+          description: Operation result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationDtoResponse'
+components:
+  schemas:
+    OperationDtoRequest:
+      type: object
+      properties:
+        operationType:
+          type: string
+          description: The type of operation (e.g., CREATE, UPDATE, DELETE)
+        userId:
+          type: integer
+          description: The ID of the target entity for the operation
+          nullable: true
+        additionalInfo:
+          type: object
+          description: Additional metadata for the operation
+          additionalProperties:
+            type: string
+    OperationDtoResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Whether the operation was successful
+        message:
+          type: string
+          description: A descriptive message about the operation result
+    User:
+      type: object
+      properties:
+        id:
+          type: number
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: mario
+        surname:
+          type: string
+          example: rossi
+        date:
+          type: string
+          description: Start date
+          example: "2017-01-01"
+          format: date
+        email:
+          type: string
+          example: mariorossi@email.com
+        phone:
+          type: string
+          example: 3334445556
+        address:
+          type: string
+          example: via genova 8
+        city:
+          type: string
+          example: napoli
+    Company:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        address:
+          type: string
+        piva:
+          type: string
+          example: 123456765431
+        phone:
+          type: string
+          example: 333444556
+    Ambulance:
+      type: object
+      properties:
+        id:
+          type: integer
+        licensePlate:
+          type: string
+        company:
+          type: integer
+          description: The ID of the company that owns the ambulance
