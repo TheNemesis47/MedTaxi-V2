@@ -159,8 +159,8 @@ components:
           description: The type of operation (e.g., CREATE, UPDATE, DELETE)
         userId:
           type: integer
+          format: int64
           description: The ID of the target entity for the operation
-          nullable: true
         additionalInfo:
           type: object
           description: Additional metadata for the operation
@@ -179,7 +179,7 @@ components:
       type: object
       properties:
         id:
-          type: number
+          type: integer
           format: int64
           example: 1
         name:

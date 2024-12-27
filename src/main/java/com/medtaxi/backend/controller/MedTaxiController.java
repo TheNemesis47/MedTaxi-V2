@@ -4,6 +4,9 @@ import com.medtaxi.api.AmbulanceApi;
 import com.medtaxi.api.CompaniesApi;
 import com.medtaxi.api.UserApi;
 import com.medtaxi.backend.command.CreateUserCommand;
+import com.medtaxi.backend.command.GetAllUsersCommand;
+import com.medtaxi.backend.command.GetUserByIdCommand;
+import com.medtaxi.backend.command.UpdateUserCommand;
 import com.medtaxi.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,10 +22,20 @@ import java.util.Optional;
 public class MedTaxiController implements AmbulanceApi, UserApi, CompaniesApi {
 
     private final CreateUserCommand createUserCommand;
+    private final GetAllUsersCommand getAllUsersCommand;
+    private final GetUserByIdCommand getUserByIdCommand;
+    private final UpdateUserCommand updateUserCommand;
 
     @Autowired
-    public MedTaxiController(CreateUserCommand createUserCommand) {
+    public MedTaxiController(CreateUserCommand createUserCommand,
+                             GetAllUsersCommand getAllUsersCommand,
+                             GetUserByIdCommand getUserByIdCommand,
+                             UpdateUserCommand updateUserCommand
+    ) {
         this.createUserCommand = createUserCommand;
+        this.getAllUsersCommand = getAllUsersCommand;
+        this.getUserByIdCommand = getUserByIdCommand;
+        this.updateUserCommand = updateUserCommand;
     }
 
     @Override
@@ -33,17 +46,20 @@ public class MedTaxiController implements AmbulanceApi, UserApi, CompaniesApi {
 
     @Override
     public ResponseEntity<List<User>> getAllUsers() {
-        return UserApi.super.getAllUsers();
+        List<User> response = getAllUsersCommand.execute();
+        return ResponseEntity.status(201).body(response);
     }
 
     @Override
     public ResponseEntity<User> getUserById(Integer userId) {
-        return UserApi.super.getUserById(userId);
+        User response = getUserByIdCommand.execute(userId);
+        return ResponseEntity.status(201).body(response);
     }
 
     @Override
     public ResponseEntity<OperationDtoResponse> updateUser(Integer userId, OperationDtoRequest operationDtoRequest) {
-        return UserApi.super.updateUser(userId, operationDtoRequest);
+        OperationDtoResponse response = updateUserCommand.execute(userId, operationDtoRequest);
+        return ResponseEntity.status(201).body(response);
     }
 
     @Override
